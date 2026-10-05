@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Dead Man's Switch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <section id="loginPage" class="login-page">
+    <div class="login-card">
+      <div class="brand-icon">◈</div>
+      <h1>Digital Dead Man's Switch</h1>
+      <p>Secure digital legacy management with controlled release.</p>
+
+      <button class="google-btn" onclick="login()">
+        <span>G</span> Continue with Google
+      </button>
+
+      <div class="divider">OR</div>
+
+      <input id="loginEmail" type="email" placeholder="Email address" />
+      <input id="loginPassword" type="password" placeholder="Password" />
+
+      <button class="primary-btn" onclick="login()">Sign In</button>
+
+      <p class="demo-note">Prototype / Demo Mode</p>
+    </div>
+  </section>
+
+
+  <!-- APPLICATION -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">◈</div>
+        <div>
+          <strong>DEAD MAN'S</strong>
+          <small>SWITCH</small>
+        </div>
+      </div>
+
+      <nav>
+        <button onclick="showPage('dashboard')">⌂ Dashboard</button>
+        <button onclick="showPage('create')">＋ Create Switch</button>
+        <button onclick="showPage('vault')">▣ Legacy Vault</button>
+        <button onclick="showPage('trustees')">♙ Trustees</button>
+        <button onclick="showPage('checkin')">♥ Check-In</button>
+        <button onclick="showPage('lifecycle')">◉ Lifecycle</button>
+        <button onclick="showPage('notifications')">✉ Notifications</button>
+        <button onclick="showPage('audit')">☷ Audit History</button>
+        <button onclick="showPage('settings')">⚙ Settings</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="prototype-badge">PROTOTYPE / DEMO</div>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <header class="topbar">
+        <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+        <div>
+          <h2 id="pageTitle">Dashboard</h2>
+          <p>Digital legacy control center</p>
+        </div>
+
+        <div class="profile">
+          <div class="avatar">P</div>
+          <span>Demo User</span>
+        </div>
+      </header>
+
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="page active">
+
+        <div class="welcome">
+          <div>
+            <h1>Good morning 👋</h1>
+            <p>Manage your digital legacy securely.</p>
+          </div>
+
+          <button class="primary-btn" onclick="showPage('create')">
+            + CREATE NEW SWITCH
+          </button>
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <span>ACTIVE SWITCHES</span>
+            <strong id="activeCount">0</strong>
+            <small>Currently monitored</small>
+          </div>
+
+          <div class="stat-card">
+            <span>INACTIVE SWITCHES</span>
+            <strong id="inactiveCount">0</strong>
+            <small>Completed or paused</small>
+          </div>
+
+          <div class="stat-card">
+            <span>LAST CHECK-IN</span>
+            <strong id="dashboardLastCheck">—</strong>
+            <small>Most recent heartbeat</small>
+          </div>
+
+          <div class="stat-card">
+            <span>CURRENT STAGE</span>
+            <strong id="dashboardStage">—</strong>
+            <small>Lifecycle status</small>
+          </div>
+
+        </div>
+
+        <div class="dashboard-grid">
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Active Switches</h3>
+                <p>Your currently monitored legacy switches</p>
+              </div>
+              <button class="text-btn" onclick="showPage('create')">+ New</button>
+            </div>
+
+            <div id="switchList" class="switch-list">
+              <div class="empty-state">
+                No switches created yet.
+              </div>
+            </div>
+          </div>
+
+          <div class="card heartbeat-card">
+            <div class="heartbeat-circle">♥</div>
+            <h3>Sentinel Heartbeat</h3>
+            <p>Your digital legacy monitoring system</p>
+
+            <div class="heartbeat-status">
+              <span class="online-dot"></span>
+              SYSTEM READY
+            </div>
+
+            <button class="primary-btn full" onclick="checkIn()">
+              ♥ CHECK IN NOW
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- CREATE SWITCH -->
+      <section id="create" class="page">
+
+        <div class="section-heading">
+          <h1>Create Digital Switch</h1>
+          <p>Configure your digital legacy release conditions.</p>
+        </div>
+
+        <div class="form-card">
+
+          <label>Switch Name</label>
+          <input id="switchName" placeholder="Example: Family Legacy" />
+
+          <label>Description</label>
+          <textarea id="switchDescription"
+            placeholder="Describe this digital switch..."></textarea>
+
+          <h3 class="form-section-title">Legacy Content</h3>
+
+          <div class="choice-grid">
+            <button id="fileChoice" class="choice active-choice"
+              onclick="selectContentType('file')">
+              📁
+              <strong>FILE</strong>
+              <small>Upload a legacy document</small>
+            </button>
+
+            <button id="messageChoice" class="choice"
+              onclick="selectContentType('message')">
+              ✉
+              <strong>MESSAGE</strong>
+              <small>Write a legacy message</small>
+            </button>
+          </div>
+
+          <div id="fileArea">
+            <label>Select Legacy File</label>
+            <input id="legacyFile" type="file"
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.zip" />
+
+            <div id="filePreview" class="file-preview hidden"></div>
+          </div>
+
+          <div id="messageArea" class="hidden">
+            <label>Legacy Message</label>
+            <textarea id="legacyMessage"
+              rows="8"
+              placeholder="Write the message that should be released..."></textarea>
+          </div>
+
+
+          <h3 class="form-section-title">Check-In Configuration</h3>
+
+          <label>Check-In Frequency</label>
+
+          <select id="frequency">
+            <option value="60">Demo — 1 minute</option>
+            <option value="180">Demo — 3 minutes</option>
+            <option value="300" selected>Demo — 5 minutes</option>
+            <option value="3600">1 hour</option>
+            <option value="21600">6 hours</option>
+            <option value="43200">12 hours</option>
+            <option value="86400">1 day</option>
+            <option value="604800">7 days</option>
+            <option value="1209600">14 days</option>
+            <option value="2592000">30 days</option>
+            <option value="7776000">90 days</option>
+            <option value="15552000">180 days</option>
+            <option value="31536000">365 days</option>
+          </select>
+
+          <label>Grace Period</label>
+
+          <select id="gracePeriod">
+            <option value="30">30 seconds</option>
+            <option value="60" selected>1 minute</option>
+            <option value="120">2 minutes</option>
+            <option value="300">5 minutes</option>
+          </select>
+
+
+          <h3 class="form-section-title">Trustees</h3>
+
+          <div class="two-column">
+
+            <div>
+              <label>Primary Trustee Name</label>
+              <input id="primaryName" placeholder="Primary trustee" />
+            </div>
+
+            <div>
+              <label>Primary Trustee Gmail</label>
+              <input id="primaryEmail"
+                type="email"
+                placeholder="primary@gmail.com" />
+            </div>
+
+          </div>
+
+          <div class="two-column">
+
+            <div>
+              <label>Secondary Trustee Name</label>
+              <input id="secondaryName" placeholder="Secondary trustee" />
+            </div>
+
+            <div>
+              <label>Secondary Trustee Gmail</label>
+              <input id="secondaryEmail"
+                type="email"
+                placeholder="secondary@gmail.com" />
+            </div>
+
+          </div>
+
+
+          <h3 class="form-section-title">Recipients</h3>
+
+          <label>Additional Gmail</label>
+          <input id="additionalEmail"
+            type="email"
+            placeholder="family@example.com" />
+
+          <label>WhatsApp Number</label>
+          <input id="whatsapp"
+            placeholder="+91 XXXXX XXXXX" />
+
+
+          <h3 class="form-section-title">Final Action</h3>
+
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="finalAction"
+                value="release" checked />
+              Release Legacy
+            </label>
+
+            <label>
+              <input type="radio" name="finalAction"
+                value="delete" />
+              Delete Legacy
+            </label>
+          </div>
+
+
+          <button class="primary-btn large"
+            onclick="createSwitch()">
+            CREATE DIGITAL SWITCH
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- VAULT -->
+      <section id="vault" class="page">
+
+        <div class="section-heading">
+          <h1>Legacy Vault</h1>
+          <p>Protected local storage for your demo legacy content.</p>
+        </div>
+
+        <div class="card">
+
+          <div class="upload-box"
+            onclick="document.getElementById('vaultFile').click()">
+
+            <div class="upload-icon">↑</div>
+
+            <h3>Upload Legacy File</h3>
+            <p>PDF, DOC, DOCX, TXT, images or ZIP</p>
+
+            <input id="vaultFile"
+              type="file"
+              hidden
+              onchange="vaultUpload(event)" />
+
+          </div>
+
+          <div id="vaultList"></div>
+
+        </div>
+      </section>
+
+
+      <!-- TRUSTEES -->
+      <section id="trustees" class="page">
+
+        <div class="section-heading">
+          <h1>Trustee Management</h1>
+          <p>Manage the people involved in your digital legacy workflow.</p>
+        </div>
+
+        <div class="two-column">
+
+          <div class="card trustee-card">
+            <div class="trustee-icon">1</div>
+            <h3>Primary Trustee</h3>
+
+            <p id="primaryDisplay">
+              Not configured
+            </p>
+
+            <span id="primaryStatus"
+              class="status-pill inactive">
+              INACTIVE
+            </span>
+          </div>
+
+          <div class="card trustee-card">
+            <div class="trustee-icon">2</div>
+            <h3>Secondary Trustee</h3>
+
+            <p id="secondaryDisplay">
+              Not configured
+            </p>
+
+            <span id="secondaryStatus"
+              class="status-pill inactive">
+              INACTIVE
+            </span>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- CHECK-IN -->
+      <section id="checkin" class="page">
+
+        <div class="section-heading">
+          <h1>Check-In Terminal</h1>
+          <p>SENTINEL HEARTBEAT PROTOCOL</p>
+        </div>
+
+        <div class="checkin-terminal">
+
+          <div class="terminal-status">
+            <span class="online-dot"></span>
+            <span id="terminalStatus">ACTIVE</span>
+          </div>
+
+          <div class="big-heart">♥</div>
+
+          <h2 id="terminalSwitch">
+            No active switch
+          </h2>
+
+          <div class="countdown-box">
+            <span>NEXT DEADLINE</span>
+            <strong id="countdown">--:--</strong>
+          </div>
+
+          <p>
+            Last verified:
+            <strong id="lastVerified">—</strong>
+          </p>
+
+          <button class="primary-btn large"
+            onclick="checkIn()">
+            ♥ CHECK IN NOW
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- LIFECYCLE -->
+      <section id="lifecycle" class="page">
+
+        <div class="section-heading">
+          <h1>Lifecycle Simulator</h1>
+          <p>Six-stage digital legacy protection workflow.</p>
+        </div>
+
+        <div class="lifecycle">
+
+          <div class="stage active" id="stage1">
+            <span>01</span>
+            <div>
+              <strong>ACTIVE</strong>
+              <p>Heartbeat nominal</p>
+            </div>
+          </div>
+
+          <div class="stage" id="stage2">
+            <span>02</span>
+            <div>
+              <strong>CHECK-IN MISSED</strong>
+              <p>Deadline passed</p>
+            </div>
+          </div>
+
+          <div class="stage" id="stage3">
+            <span>03</span>
+            <div>
+              <strong>GRACE PERIOD</strong>
+              <p>Failsafe buffer active</p>
+            </div>
+          </div>
+
+          <div class="stage" id="stage4">
+            <span>04</span>
+            <div>
+              <strong>PRIMARY TRUSTEE</strong>
+              <p>Primary notification</p>
+            </div>
+          </div>
+
+          <div class="stage" id="stage5">
+            <span>05</span>
+            <div>
+              <strong>SECONDARY TRUSTEE</strong>
+              <p>Secondary notification</p>
+            </div>
+          </div>
+
+          <div class="stage" id="stage6">
+            <span>06</span>
+            <div>
+              <strong>FINAL RELEASE</strong>
+              <p>Release or delete</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="stageControls" class="card stage-controls hidden"></div>
+
+      </section>
+
+
+      <!-- NOTIFICATIONS -->
+      <section id="notifications" class="page">
+
+        <div class="section-heading">
+          <h1>Notification Center</h1>
+          <p>All notifications shown here are simulations.</p>
+        </div>
+
+        <div id="notificationList">
+
+          <div class="empty-state">
+            No notifications yet.
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- AUDIT -->
+      <section id="audit" class="page">
+
+        <div class="section-heading">
+          <h1>Audit & Activity</h1>
+          <p>Complete local activity history.</p>
+        </div>
+
+        <div class="card">
+          <div id="auditList">
+            <div class="empty-state">
+              No activity yet.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- SETTINGS -->
+      <section id="settings" class="page">
+
+        <div class="section-heading">
+          <h1>Settings</h1>
+          <p>Application configuration.</p>
+        </div>
+
+        <div class="card settings-card">
+
+          <h3>Demo Mode</h3>
+
+          <div class="setting-row">
+            <div>
+              <strong>Accelerated Lifecycle</strong>
+              <p>Use short durations for presentations.</p>
+            </div>
+
+            <input type="checkbox" checked />
+          </div>
+
+          <hr />
+
+          <h3>Application</h3>
+
+          <div class="setting-row">
+            <div>
+              <strong>Prototype Mode</strong>
+              <p>External services are simulated.</p>
+            </div>
+
+            <span class="status-pill active-pill">
+              ENABLED
+            </span>
+          </div>
+
+          <hr />
+
+          <button class="danger-btn" onclick="resetApplication()">
+            Reset Demo Data
+          </button>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- RELEASE MODAL -->
+  <div id="releaseModal" class="modal hidden">
+
+    <div class="modal-card">
+
+      <button class="modal-close"
+        onclick="closeModal()">×</button>
+
+      <h2>Final Action</h2>
+
+      <p>
+        Your switch has reached the final release stage.
+      </p>
+
+      <div id="releaseContent"></div>
+
+      <div class="final-actions">
+
+        <button class="release-btn"
+          onclick="releaseLegacy()">
+          RELEASE LEGACY
+        </button>
+
+        <button class="danger-btn"
+          onclick="deleteLegacy()">
+          DELETE LEGACY
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <script src="app.js"></script>
+</body>
+</html>
